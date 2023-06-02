@@ -1,0 +1,592 @@
+{
+ "Resources": {
+  "Transactions098C5767": {
+   "Type": "AWS::DynamoDB::Table",
+   "Properties": {
+    "KeySchema": [
+     {
+      "AttributeName": "transactionId",
+      "KeyType": "HASH"
+     }
+    ],
+    "AttributeDefinitions": [
+     {
+      "AttributeName": "transactionId",
+      "AttributeType": "S"
+     }
+    ],
+    "ProvisionedThroughput": {
+     "ReadCapacityUnits": 5,
+     "WriteCapacityUnits": 5
+    },
+    "TableName": "Transactions"
+   },
+   "UpdateReplacePolicy": "Delete",
+   "DeletionPolicy": "Delete",
+   "Metadata": {
+    "aws:cdk:path": "ExampleCrudDynamoStack/Transactions/Resource"
+   }
+  },
+  "PutTransactionServiceRole2C601E5F": {
+   "Type": "AWS::IAM::Role",
+   "Properties": {
+    "AssumeRolePolicyDocument": {
+     "Statement": [
+      {
+       "Action": "sts:AssumeRole",
+       "Effect": "Allow",
+       "Principal": {
+        "Service": "lambda.amazonaws.com"
+       }
+      }
+     ],
+     "Version": "2012-10-17"
+    },
+    "ManagedPolicyArns": [
+     {
+      "Fn::Join": [
+       "",
+       [
+        "arn:",
+        {
+         "Ref": "AWS::Partition"
+        },
+        ":iam::aws:policy/service-role/AWSLambdaBasicExecutionRole"
+       ]
+      ]
+     }
+    ]
+   },
+   "Metadata": {
+    "aws:cdk:path": "ExampleCrudDynamoStack/PutTransaction/ServiceRole/Resource"
+   }
+  },
+  "PutTransactionServiceRoleDefaultPolicyD4DB74D0": {
+   "Type": "AWS::IAM::Policy",
+   "Properties": {
+    "PolicyDocument": {
+     "Statement": [
+      {
+       "Action": [
+        "dynamodb:BatchGetItem",
+        "dynamodb:BatchWriteItem",
+        "dynamodb:ConditionCheckItem",
+        "dynamodb:DeleteItem",
+        "dynamodb:DescribeTable",
+        "dynamodb:GetItem",
+        "dynamodb:GetRecords",
+        "dynamodb:GetShardIterator",
+        "dynamodb:PutItem",
+        "dynamodb:Query",
+        "dynamodb:Scan",
+        "dynamodb:UpdateItem"
+       ],
+       "Effect": "Allow",
+       "Resource": [
+        {
+         "Fn::GetAtt": [
+          "Transactions098C5767",
+          "Arn"
+         ]
+        },
+        {
+         "Ref": "AWS::NoValue"
+        }
+       ]
+      }
+     ],
+     "Version": "2012-10-17"
+    },
+    "PolicyName": "PutTransactionServiceRoleDefaultPolicyD4DB74D0",
+    "Roles": [
+     {
+      "Ref": "PutTransactionServiceRole2C601E5F"
+     }
+    ]
+   },
+   "Metadata": {
+    "aws:cdk:path": "ExampleCrudDynamoStack/PutTransaction/ServiceRole/DefaultPolicy/Resource"
+   }
+  },
+  "PutTransaction57ED1133": {
+   "Type": "AWS::Lambda::Function",
+   "Properties": {
+    "Code": {
+     "S3Bucket": "cdk-hnb659fds-assets-725844594796-us-east-1",
+     "S3Key": "cf7f65e8939f9331a14c597951e949a43eddd215ada332c77d62de263a01a9f2.zip"
+    },
+    "Role": {
+     "Fn::GetAtt": [
+      "PutTransactionServiceRole2C601E5F",
+      "Arn"
+     ]
+    },
+    "Environment": {
+     "Variables": {
+      "TABLE_NAME": {
+       "Ref": "Transactions098C5767"
+      }
+     }
+    },
+    "Handler": "putTransaction.handler",
+    "Runtime": "nodejs14.x"
+   },
+   "DependsOn": [
+    "PutTransactionServiceRoleDefaultPolicyD4DB74D0",
+    "PutTransactionServiceRole2C601E5F"
+   ],
+   "Metadata": {
+    "aws:cdk:path": "ExampleCrudDynamoStack/PutTransaction/Resource",
+    "aws:asset:path": "asset.cf7f65e8939f9331a14c597951e949a43eddd215ada332c77d62de263a01a9f2",
+    "aws:asset:is-bundled": false,
+    "aws:asset:property": "Code"
+   }
+  },
+  "GetBalanceServiceRole462471AB": {
+   "Type": "AWS::IAM::Role",
+   "Properties": {
+    "AssumeRolePolicyDocument": {
+     "Statement": [
+      {
+       "Action": "sts:AssumeRole",
+       "Effect": "Allow",
+       "Principal": {
+        "Service": "lambda.amazonaws.com"
+       }
+      }
+     ],
+     "Version": "2012-10-17"
+    },
+    "ManagedPolicyArns": [
+     {
+      "Fn::Join": [
+       "",
+       [
+        "arn:",
+        {
+         "Ref": "AWS::Partition"
+        },
+        ":iam::aws:policy/service-role/AWSLambdaBasicExecutionRole"
+       ]
+      ]
+     }
+    ]
+   },
+   "Metadata": {
+    "aws:cdk:path": "ExampleCrudDynamoStack/GetBalance/ServiceRole/Resource"
+   }
+  },
+  "GetBalanceServiceRoleDefaultPolicy15FADC5A": {
+   "Type": "AWS::IAM::Policy",
+   "Properties": {
+    "PolicyDocument": {
+     "Statement": [
+      {
+       "Action": [
+        "dynamodb:BatchGetItem",
+        "dynamodb:ConditionCheckItem",
+        "dynamodb:DescribeTable",
+        "dynamodb:GetItem",
+        "dynamodb:GetRecords",
+        "dynamodb:GetShardIterator",
+        "dynamodb:Query",
+        "dynamodb:Scan"
+       ],
+       "Effect": "Allow",
+       "Resource": [
+        {
+         "Fn::GetAtt": [
+          "Transactions098C5767",
+          "Arn"
+         ]
+        },
+        {
+         "Ref": "AWS::NoValue"
+        }
+       ]
+      }
+     ],
+     "Version": "2012-10-17"
+    },
+    "PolicyName": "GetBalanceServiceRoleDefaultPolicy15FADC5A",
+    "Roles": [
+     {
+      "Ref": "GetBalanceServiceRole462471AB"
+     }
+    ]
+   },
+   "Metadata": {
+    "aws:cdk:path": "ExampleCrudDynamoStack/GetBalance/ServiceRole/DefaultPolicy/Resource"
+   }
+  },
+  "GetBalanceF3D06A93": {
+   "Type": "AWS::Lambda::Function",
+   "Properties": {
+    "Code": {
+     "S3Bucket": "cdk-hnb659fds-assets-725844594796-us-east-1",
+     "S3Key": "cf7f65e8939f9331a14c597951e949a43eddd215ada332c77d62de263a01a9f2.zip"
+    },
+    "Role": {
+     "Fn::GetAtt": [
+      "GetBalanceServiceRole462471AB",
+      "Arn"
+     ]
+    },
+    "Environment": {
+     "Variables": {
+      "TABLE_NAME": {
+       "Ref": "Transactions098C5767"
+      }
+     }
+    },
+    "Handler": "getBalance.handler",
+    "Runtime": "nodejs14.x"
+   },
+   "DependsOn": [
+    "GetBalanceServiceRoleDefaultPolicy15FADC5A",
+    "GetBalanceServiceRole462471AB"
+   ],
+   "Metadata": {
+    "aws:cdk:path": "ExampleCrudDynamoStack/GetBalance/Resource",
+    "aws:asset:path": "asset.cf7f65e8939f9331a14c597951e949a43eddd215ada332c77d62de263a01a9f2",
+    "aws:asset:is-bundled": false,
+    "aws:asset:property": "Code"
+   }
+  },
+  "TransactionsApi503DE4B5": {
+   "Type": "AWS::ApiGateway::RestApi",
+   "Properties": {
+    "Name": "TransactionServiceApi"
+   },
+   "Metadata": {
+    "aws:cdk:path": "ExampleCrudDynamoStack/TransactionsApi/Resource"
+   }
+  },
+  "TransactionsApiDeployment07ECDF19cba0f11f9fdb47d312825680fd87dbf8": {
+   "Type": "AWS::ApiGateway::Deployment",
+   "Properties": {
+    "RestApiId": {
+     "Ref": "TransactionsApi503DE4B5"
+    },
+    "Description": "Automatically created by the RestApi construct"
+   },
+   "DependsOn": [
+    "TransactionsApibalanceGETE484EC5C",
+    "TransactionsApibalance39855897",
+    "TransactionsApitransactionsPOSTF62B107C",
+    "TransactionsApitransactions96D82EFF"
+   ],
+   "Metadata": {
+    "aws:cdk:path": "ExampleCrudDynamoStack/TransactionsApi/Deployment/Resource"
+   }
+  },
+  "TransactionsApiDeploymentStageprod8F65B9E8": {
+   "Type": "AWS::ApiGateway::Stage",
+   "Properties": {
+    "RestApiId": {
+     "Ref": "TransactionsApi503DE4B5"
+    },
+    "DeploymentId": {
+     "Ref": "TransactionsApiDeployment07ECDF19cba0f11f9fdb47d312825680fd87dbf8"
+    },
+    "StageName": "prod"
+   },
+   "Metadata": {
+    "aws:cdk:path": "ExampleCrudDynamoStack/TransactionsApi/DeploymentStage.prod/Resource"
+   }
+  },
+  "TransactionsApitransactions96D82EFF": {
+   "Type": "AWS::ApiGateway::Resource",
+   "Properties": {
+    "ParentId": {
+     "Fn::GetAtt": [
+      "TransactionsApi503DE4B5",
+      "RootResourceId"
+     ]
+    },
+    "PathPart": "transactions",
+    "RestApiId": {
+     "Ref": "TransactionsApi503DE4B5"
+    }
+   },
+   "Metadata": {
+    "aws:cdk:path": "ExampleCrudDynamoStack/TransactionsApi/Default/transactions/Resource"
+   }
+  },
+  "TransactionsApitransactionsPOSTApiPermissionExampleCrudDynamoStackTransactionsApi2C545868POSTtransactionsE7DF100C": {
+   "Type": "AWS::Lambda::Permission",
+   "Properties": {
+    "Action": "lambda:InvokeFunction",
+    "FunctionName": {
+     "Fn::GetAtt": [
+      "PutTransaction57ED1133",
+      "Arn"
+     ]
+    },
+    "Principal": "apigateway.amazonaws.com",
+    "SourceArn": {
+     "Fn::Join": [
+      "",
+      [
+       "arn:aws:execute-api:us-east-1:725844594796:",
+       {
+        "Ref": "TransactionsApi503DE4B5"
+       },
+       "/",
+       {
+        "Ref": "TransactionsApiDeploymentStageprod8F65B9E8"
+       },
+       "/POST/transactions"
+      ]
+     ]
+    }
+   },
+   "Metadata": {
+    "aws:cdk:path": "ExampleCrudDynamoStack/TransactionsApi/Default/transactions/POST/ApiPermission.ExampleCrudDynamoStackTransactionsApi2C545868.POST..transactions"
+   }
+  },
+  "TransactionsApitransactionsPOSTApiPermissionTestExampleCrudDynamoStackTransactionsApi2C545868POSTtransactionsB48F7A85": {
+   "Type": "AWS::Lambda::Permission",
+   "Properties": {
+    "Action": "lambda:InvokeFunction",
+    "FunctionName": {
+     "Fn::GetAtt": [
+      "PutTransaction57ED1133",
+      "Arn"
+     ]
+    },
+    "Principal": "apigateway.amazonaws.com",
+    "SourceArn": {
+     "Fn::Join": [
+      "",
+      [
+       "arn:aws:execute-api:us-east-1:725844594796:",
+       {
+        "Ref": "TransactionsApi503DE4B5"
+       },
+       "/test-invoke-stage/POST/transactions"
+      ]
+     ]
+    }
+   },
+   "Metadata": {
+    "aws:cdk:path": "ExampleCrudDynamoStack/TransactionsApi/Default/transactions/POST/ApiPermission.Test.ExampleCrudDynamoStackTransactionsApi2C545868.POST..transactions"
+   }
+  },
+  "TransactionsApitransactionsPOSTF62B107C": {
+   "Type": "AWS::ApiGateway::Method",
+   "Properties": {
+    "HttpMethod": "POST",
+    "ResourceId": {
+     "Ref": "TransactionsApitransactions96D82EFF"
+    },
+    "RestApiId": {
+     "Ref": "TransactionsApi503DE4B5"
+    },
+    "AuthorizationType": "NONE",
+    "Integration": {
+     "IntegrationHttpMethod": "POST",
+     "Type": "AWS_PROXY",
+     "Uri": {
+      "Fn::Join": [
+       "",
+       [
+        "arn:aws:apigateway:us-east-1:lambda:path/2015-03-31/functions/",
+        {
+         "Fn::GetAtt": [
+          "PutTransaction57ED1133",
+          "Arn"
+         ]
+        },
+        "/invocations"
+       ]
+      ]
+     }
+    }
+   },
+   "Metadata": {
+    "aws:cdk:path": "ExampleCrudDynamoStack/TransactionsApi/Default/transactions/POST/Resource"
+   }
+  },
+  "TransactionsApibalance39855897": {
+   "Type": "AWS::ApiGateway::Resource",
+   "Properties": {
+    "ParentId": {
+     "Fn::GetAtt": [
+      "TransactionsApi503DE4B5",
+      "RootResourceId"
+     ]
+    },
+    "PathPart": "balance",
+    "RestApiId": {
+     "Ref": "TransactionsApi503DE4B5"
+    }
+   },
+   "Metadata": {
+    "aws:cdk:path": "ExampleCrudDynamoStack/TransactionsApi/Default/balance/Resource"
+   }
+  },
+  "TransactionsApibalanceGETApiPermissionExampleCrudDynamoStackTransactionsApi2C545868GETbalance58AA39FE": {
+   "Type": "AWS::Lambda::Permission",
+   "Properties": {
+    "Action": "lambda:InvokeFunction",
+    "FunctionName": {
+     "Fn::GetAtt": [
+      "GetBalanceF3D06A93",
+      "Arn"
+     ]
+    },
+    "Principal": "apigateway.amazonaws.com",
+    "SourceArn": {
+     "Fn::Join": [
+      "",
+      [
+       "arn:aws:execute-api:us-east-1:725844594796:",
+       {
+        "Ref": "TransactionsApi503DE4B5"
+       },
+       "/",
+       {
+        "Ref": "TransactionsApiDeploymentStageprod8F65B9E8"
+       },
+       "/GET/balance"
+      ]
+     ]
+    }
+   },
+   "Metadata": {
+    "aws:cdk:path": "ExampleCrudDynamoStack/TransactionsApi/Default/balance/GET/ApiPermission.ExampleCrudDynamoStackTransactionsApi2C545868.GET..balance"
+   }
+  },
+  "TransactionsApibalanceGETApiPermissionTestExampleCrudDynamoStackTransactionsApi2C545868GETbalanceAD399AA9": {
+   "Type": "AWS::Lambda::Permission",
+   "Properties": {
+    "Action": "lambda:InvokeFunction",
+    "FunctionName": {
+     "Fn::GetAtt": [
+      "GetBalanceF3D06A93",
+      "Arn"
+     ]
+    },
+    "Principal": "apigateway.amazonaws.com",
+    "SourceArn": {
+     "Fn::Join": [
+      "",
+      [
+       "arn:aws:execute-api:us-east-1:725844594796:",
+       {
+        "Ref": "TransactionsApi503DE4B5"
+       },
+       "/test-invoke-stage/GET/balance"
+      ]
+     ]
+    }
+   },
+   "Metadata": {
+    "aws:cdk:path": "ExampleCrudDynamoStack/TransactionsApi/Default/balance/GET/ApiPermission.Test.ExampleCrudDynamoStackTransactionsApi2C545868.GET..balance"
+   }
+  },
+  "TransactionsApibalanceGETE484EC5C": {
+   "Type": "AWS::ApiGateway::Method",
+   "Properties": {
+    "HttpMethod": "GET",
+    "ResourceId": {
+     "Ref": "TransactionsApibalance39855897"
+    },
+    "RestApiId": {
+     "Ref": "TransactionsApi503DE4B5"
+    },
+    "AuthorizationType": "NONE",
+    "Integration": {
+     "IntegrationHttpMethod": "POST",
+     "Type": "AWS_PROXY",
+     "Uri": {
+      "Fn::Join": [
+       "",
+       [
+        "arn:aws:apigateway:us-east-1:lambda:path/2015-03-31/functions/",
+        {
+         "Fn::GetAtt": [
+          "GetBalanceF3D06A93",
+          "Arn"
+         ]
+        },
+        "/invocations"
+       ]
+      ]
+     }
+    }
+   },
+   "Metadata": {
+    "aws:cdk:path": "ExampleCrudDynamoStack/TransactionsApi/Default/balance/GET/Resource"
+   }
+  },
+  "CDKMetadata": {
+   "Type": "AWS::CDK::Metadata",
+   "Properties": {
+    "Analytics": "v2:deflate64:H4sIAAAAAAAA/02PwW7DIBBEvyV3vI3TQ3tNWuVWNUp7j9awdTc2YBloZFn8ewGnqk/7ZpgdYAdPW9hu8OYqqbqq5wbmD4+yE8m6zGoyqK1K5ic2PYmXL1Mgih51oxDmYzDSszX5aM0nGjU7l1QUjBrms132yzzZnuVUcoWicI8XdI68g30eScMhyI78AR0JHLhFTzecUhE5vx+4dN3xlYbeTpqMz+5Kpa+05dYFUt6GUVLp/BP3ooXfyH9bla2FYvzPlYflIjZtTrwHPwS/Xo/CWEVwdQ8/9TPUO6g3V8dcjcF41gTnZf4COSYgWnUBAAA="
+   },
+   "Metadata": {
+    "aws:cdk:path": "ExampleCrudDynamoStack/CDKMetadata/Default"
+   }
+  }
+ },
+ "Outputs": {
+  "TransactionsApiEndpoint21DCA31F": {
+   "Value": {
+    "Fn::Join": [
+     "",
+     [
+      "https://",
+      {
+       "Ref": "TransactionsApi503DE4B5"
+      },
+      ".execute-api.us-east-1.",
+      {
+       "Ref": "AWS::URLSuffix"
+      },
+      "/",
+      {
+       "Ref": "TransactionsApiDeploymentStageprod8F65B9E8"
+      },
+      "/"
+     ]
+    ]
+   }
+  }
+ },
+ "Parameters": {
+  "BootstrapVersion": {
+   "Type": "AWS::SSM::Parameter::Value<String>",
+   "Default": "/cdk-bootstrap/hnb659fds/version",
+   "Description": "Version of the CDK Bootstrap resources in this environment, automatically retrieved from SSM Parameter Store. [cdk:skip]"
+  }
+ },
+ "Rules": {
+  "CheckBootstrapVersion": {
+   "Assertions": [
+    {
+     "Assert": {
+      "Fn::Not": [
+       {
+        "Fn::Contains": [
+         [
+          "1",
+          "2",
+          "3",
+          "4",
+          "5"
+         ],
+         {
+          "Ref": "BootstrapVersion"
+         }
+        ]
+       }
+      ]
+     },
+     "AssertDescription": "CDK bootstrap stack version 6 required. Please run 'cdk bootstrap' with a recent version of the CDK CLI."
+    }
+   ]
+  }
+ }
+}
