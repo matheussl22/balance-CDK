@@ -3,13 +3,13 @@ const dynamo = new AWS.DynamoDB.DocumentClient();
 
 exports.handler = async () => {
     const params = {
-        TableName: process.env.TABLE_NAME,
+        TableName: process.env.BALANCE_TABLE_NAME,
         Select: "ALL_ATTRIBUTES"
     };
 
     try {
         const data = await dynamo.scan(params).promise();
-        const balance = data.Items.reduce((acc, transaction) => acc + transaction.amount, 0);
+        const balance = data.Items[data.Items.length - 1].balance;
         return { statusCode: 200, body: JSON.stringify({ balance }) };
     } catch (error) {
         console.error(error);
