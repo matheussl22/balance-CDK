@@ -4,17 +4,41 @@
     "id": "App",
     "path": "",
     "children": {
-      "ExampleCrudDynamoStack": {
-        "id": "ExampleCrudDynamoStack",
-        "path": "ExampleCrudDynamoStack",
+      "Balance": {
+        "id": "Balance",
+        "path": "Balance",
         "children": {
-          "Transactions": {
-            "id": "Transactions",
-            "path": "ExampleCrudDynamoStack/Transactions",
+          "TransactionsQueue": {
+            "id": "TransactionsQueue",
+            "path": "Balance/TransactionsQueue",
             "children": {
               "Resource": {
                 "id": "Resource",
-                "path": "ExampleCrudDynamoStack/Transactions/Resource",
+                "path": "Balance/TransactionsQueue/Resource",
+                "attributes": {
+                  "aws:cdk:cloudformation:type": "AWS::SQS::Queue",
+                  "aws:cdk:cloudformation:props": {
+                    "visibilityTimeout": 30
+                  }
+                },
+                "constructInfo": {
+                  "fqn": "aws-cdk-lib.aws_sqs.CfnQueue",
+                  "version": "2.70.0"
+                }
+              }
+            },
+            "constructInfo": {
+              "fqn": "aws-cdk-lib.aws_sqs.Queue",
+              "version": "2.70.0"
+            }
+          },
+          "Balance": {
+            "id": "Balance",
+            "path": "Balance/Balance",
+            "children": {
+              "Resource": {
+                "id": "Resource",
+                "path": "Balance/Balance/Resource",
                 "attributes": {
                   "aws:cdk:cloudformation:type": "AWS::DynamoDB::Table",
                   "aws:cdk:cloudformation:props": {
@@ -34,7 +58,7 @@
                       "readCapacityUnits": 5,
                       "writeCapacityUnits": 5
                     },
-                    "tableName": "Transactions"
+                    "tableName": "Balance"
                   }
                 },
                 "constructInfo": {
@@ -44,7 +68,7 @@
               },
               "ScalingRole": {
                 "id": "ScalingRole",
-                "path": "ExampleCrudDynamoStack/Transactions/ScalingRole",
+                "path": "Balance/Balance/ScalingRole",
                 "constructInfo": {
                   "fqn": "aws-cdk-lib.Resource",
                   "version": "2.70.0"
@@ -56,17 +80,17 @@
               "version": "2.70.0"
             }
           },
-          "PutTransaction": {
-            "id": "PutTransaction",
-            "path": "ExampleCrudDynamoStack/PutTransaction",
+          "UpdateBalance": {
+            "id": "UpdateBalance",
+            "path": "Balance/UpdateBalance",
             "children": {
               "ServiceRole": {
                 "id": "ServiceRole",
-                "path": "ExampleCrudDynamoStack/PutTransaction/ServiceRole",
+                "path": "Balance/UpdateBalance/ServiceRole",
                 "children": {
                   "ImportServiceRole": {
                     "id": "ImportServiceRole",
-                    "path": "ExampleCrudDynamoStack/PutTransaction/ServiceRole/ImportServiceRole",
+                    "path": "Balance/UpdateBalance/ServiceRole/ImportServiceRole",
                     "constructInfo": {
                       "fqn": "aws-cdk-lib.Resource",
                       "version": "2.70.0"
@@ -74,7 +98,7 @@
                   },
                   "Resource": {
                     "id": "Resource",
-                    "path": "ExampleCrudDynamoStack/PutTransaction/ServiceRole/Resource",
+                    "path": "Balance/UpdateBalance/ServiceRole/Resource",
                     "attributes": {
                       "aws:cdk:cloudformation:type": "AWS::IAM::Role",
                       "aws:cdk:cloudformation:props": {
@@ -113,11 +137,297 @@
                   },
                   "DefaultPolicy": {
                     "id": "DefaultPolicy",
-                    "path": "ExampleCrudDynamoStack/PutTransaction/ServiceRole/DefaultPolicy",
+                    "path": "Balance/UpdateBalance/ServiceRole/DefaultPolicy",
                     "children": {
                       "Resource": {
                         "id": "Resource",
-                        "path": "ExampleCrudDynamoStack/PutTransaction/ServiceRole/DefaultPolicy/Resource",
+                        "path": "Balance/UpdateBalance/ServiceRole/DefaultPolicy/Resource",
+                        "attributes": {
+                          "aws:cdk:cloudformation:type": "AWS::IAM::Policy",
+                          "aws:cdk:cloudformation:props": {
+                            "policyDocument": {
+                              "Statement": [
+                                {
+                                  "Action": [
+                                    "dynamodb:BatchGetItem",
+                                    "dynamodb:BatchWriteItem",
+                                    "dynamodb:ConditionCheckItem",
+                                    "dynamodb:DeleteItem",
+                                    "dynamodb:DescribeTable",
+                                    "dynamodb:GetItem",
+                                    "dynamodb:GetRecords",
+                                    "dynamodb:GetShardIterator",
+                                    "dynamodb:PutItem",
+                                    "dynamodb:Query",
+                                    "dynamodb:Scan",
+                                    "dynamodb:UpdateItem"
+                                  ],
+                                  "Effect": "Allow",
+                                  "Resource": [
+                                    {
+                                      "Fn::GetAtt": [
+                                        "BalanceBDB5ECCD",
+                                        "Arn"
+                                      ]
+                                    },
+                                    {
+                                      "Ref": "AWS::NoValue"
+                                    }
+                                  ]
+                                },
+                                {
+                                  "Action": [
+                                    "sqs:ChangeMessageVisibility",
+                                    "sqs:DeleteMessage",
+                                    "sqs:GetQueueAttributes",
+                                    "sqs:GetQueueUrl",
+                                    "sqs:ReceiveMessage"
+                                  ],
+                                  "Effect": "Allow",
+                                  "Resource": {
+                                    "Fn::GetAtt": [
+                                      "TransactionsQueue38DCEC48",
+                                      "Arn"
+                                    ]
+                                  }
+                                }
+                              ],
+                              "Version": "2012-10-17"
+                            },
+                            "policyName": "UpdateBalanceServiceRoleDefaultPolicyB78A8440",
+                            "roles": [
+                              {
+                                "Ref": "UpdateBalanceServiceRole1961A66C"
+                              }
+                            ]
+                          }
+                        },
+                        "constructInfo": {
+                          "fqn": "aws-cdk-lib.aws_iam.CfnPolicy",
+                          "version": "2.70.0"
+                        }
+                      }
+                    },
+                    "constructInfo": {
+                      "fqn": "aws-cdk-lib.aws_iam.Policy",
+                      "version": "2.70.0"
+                    }
+                  }
+                },
+                "constructInfo": {
+                  "fqn": "aws-cdk-lib.aws_iam.Role",
+                  "version": "2.70.0"
+                }
+              },
+              "Code": {
+                "id": "Code",
+                "path": "Balance/UpdateBalance/Code",
+                "children": {
+                  "Stage": {
+                    "id": "Stage",
+                    "path": "Balance/UpdateBalance/Code/Stage",
+                    "constructInfo": {
+                      "fqn": "aws-cdk-lib.AssetStaging",
+                      "version": "2.70.0"
+                    }
+                  },
+                  "AssetBucket": {
+                    "id": "AssetBucket",
+                    "path": "Balance/UpdateBalance/Code/AssetBucket",
+                    "constructInfo": {
+                      "fqn": "aws-cdk-lib.aws_s3.BucketBase",
+                      "version": "2.70.0"
+                    }
+                  }
+                },
+                "constructInfo": {
+                  "fqn": "aws-cdk-lib.aws_s3_assets.Asset",
+                  "version": "2.70.0"
+                }
+              },
+              "Resource": {
+                "id": "Resource",
+                "path": "Balance/UpdateBalance/Resource",
+                "attributes": {
+                  "aws:cdk:cloudformation:type": "AWS::Lambda::Function",
+                  "aws:cdk:cloudformation:props": {
+                    "code": {
+                      "s3Bucket": "cdk-hnb659fds-assets-725844594796-us-east-1",
+                      "s3Key": "a97305b22226ab7a2630a59afdbb8fff3038ba671c3edb009c262e8e6a00f068.zip"
+                    },
+                    "role": {
+                      "Fn::GetAtt": [
+                        "UpdateBalanceServiceRole1961A66C",
+                        "Arn"
+                      ]
+                    },
+                    "environment": {
+                      "variables": {
+                        "BALANCE_TABLE_NAME": {
+                          "Ref": "BalanceBDB5ECCD"
+                        },
+                        "QUEUE_URL": {
+                          "Ref": "TransactionsQueue38DCEC48"
+                        }
+                      }
+                    },
+                    "handler": "updateBalance.handler",
+                    "runtime": "nodejs14.x"
+                  }
+                },
+                "constructInfo": {
+                  "fqn": "aws-cdk-lib.aws_lambda.CfnFunction",
+                  "version": "2.70.0"
+                }
+              },
+              "SqsEventSource:BalanceTransactionsQueue055C606E": {
+                "id": "SqsEventSource:BalanceTransactionsQueue055C606E",
+                "path": "Balance/UpdateBalance/SqsEventSource:BalanceTransactionsQueue055C606E",
+                "children": {
+                  "Resource": {
+                    "id": "Resource",
+                    "path": "Balance/UpdateBalance/SqsEventSource:BalanceTransactionsQueue055C606E/Resource",
+                    "attributes": {
+                      "aws:cdk:cloudformation:type": "AWS::Lambda::EventSourceMapping",
+                      "aws:cdk:cloudformation:props": {
+                        "functionName": {
+                          "Ref": "UpdateBalance2EC97B09"
+                        },
+                        "eventSourceArn": {
+                          "Fn::GetAtt": [
+                            "TransactionsQueue38DCEC48",
+                            "Arn"
+                          ]
+                        }
+                      }
+                    },
+                    "constructInfo": {
+                      "fqn": "aws-cdk-lib.aws_lambda.CfnEventSourceMapping",
+                      "version": "2.70.0"
+                    }
+                  }
+                },
+                "constructInfo": {
+                  "fqn": "aws-cdk-lib.aws_lambda.EventSourceMapping",
+                  "version": "2.70.0"
+                }
+              }
+            },
+            "constructInfo": {
+              "fqn": "aws-cdk-lib.aws_lambda.Function",
+              "version": "2.70.0"
+            }
+          },
+          "Transactions": {
+            "id": "Transactions",
+            "path": "Balance/Transactions",
+            "children": {
+              "Resource": {
+                "id": "Resource",
+                "path": "Balance/Transactions/Resource",
+                "attributes": {
+                  "aws:cdk:cloudformation:type": "AWS::DynamoDB::Table",
+                  "aws:cdk:cloudformation:props": {
+                    "keySchema": [
+                      {
+                        "attributeName": "transactionId",
+                        "keyType": "HASH"
+                      }
+                    ],
+                    "attributeDefinitions": [
+                      {
+                        "attributeName": "transactionId",
+                        "attributeType": "S"
+                      }
+                    ],
+                    "provisionedThroughput": {
+                      "readCapacityUnits": 5,
+                      "writeCapacityUnits": 5
+                    },
+                    "tableName": "Transactions"
+                  }
+                },
+                "constructInfo": {
+                  "fqn": "aws-cdk-lib.aws_dynamodb.CfnTable",
+                  "version": "2.70.0"
+                }
+              },
+              "ScalingRole": {
+                "id": "ScalingRole",
+                "path": "Balance/Transactions/ScalingRole",
+                "constructInfo": {
+                  "fqn": "aws-cdk-lib.Resource",
+                  "version": "2.70.0"
+                }
+              }
+            },
+            "constructInfo": {
+              "fqn": "aws-cdk-lib.aws_dynamodb.Table",
+              "version": "2.70.0"
+            }
+          },
+          "PutTransaction": {
+            "id": "PutTransaction",
+            "path": "Balance/PutTransaction",
+            "children": {
+              "ServiceRole": {
+                "id": "ServiceRole",
+                "path": "Balance/PutTransaction/ServiceRole",
+                "children": {
+                  "ImportServiceRole": {
+                    "id": "ImportServiceRole",
+                    "path": "Balance/PutTransaction/ServiceRole/ImportServiceRole",
+                    "constructInfo": {
+                      "fqn": "aws-cdk-lib.Resource",
+                      "version": "2.70.0"
+                    }
+                  },
+                  "Resource": {
+                    "id": "Resource",
+                    "path": "Balance/PutTransaction/ServiceRole/Resource",
+                    "attributes": {
+                      "aws:cdk:cloudformation:type": "AWS::IAM::Role",
+                      "aws:cdk:cloudformation:props": {
+                        "assumeRolePolicyDocument": {
+                          "Statement": [
+                            {
+                              "Action": "sts:AssumeRole",
+                              "Effect": "Allow",
+                              "Principal": {
+                                "Service": "lambda.amazonaws.com"
+                              }
+                            }
+                          ],
+                          "Version": "2012-10-17"
+                        },
+                        "managedPolicyArns": [
+                          {
+                            "Fn::Join": [
+                              "",
+                              [
+                                "arn:",
+                                {
+                                  "Ref": "AWS::Partition"
+                                },
+                                ":iam::aws:policy/service-role/AWSLambdaBasicExecutionRole"
+                              ]
+                            ]
+                          }
+                        ]
+                      }
+                    },
+                    "constructInfo": {
+                      "fqn": "aws-cdk-lib.aws_iam.CfnRole",
+                      "version": "2.70.0"
+                    }
+                  },
+                  "DefaultPolicy": {
+                    "id": "DefaultPolicy",
+                    "path": "Balance/PutTransaction/ServiceRole/DefaultPolicy",
+                    "children": {
+                      "Resource": {
+                        "id": "Resource",
+                        "path": "Balance/PutTransaction/ServiceRole/DefaultPolicy/Resource",
                         "attributes": {
                           "aws:cdk:cloudformation:type": "AWS::IAM::Policy",
                           "aws:cdk:cloudformation:props": {
@@ -150,6 +460,20 @@
                                       "Ref": "AWS::NoValue"
                                     }
                                   ]
+                                },
+                                {
+                                  "Action": [
+                                    "sqs:GetQueueAttributes",
+                                    "sqs:GetQueueUrl",
+                                    "sqs:SendMessage"
+                                  ],
+                                  "Effect": "Allow",
+                                  "Resource": {
+                                    "Fn::GetAtt": [
+                                      "TransactionsQueue38DCEC48",
+                                      "Arn"
+                                    ]
+                                  }
                                 }
                               ],
                               "Version": "2012-10-17"
@@ -181,11 +505,11 @@
               },
               "Code": {
                 "id": "Code",
-                "path": "ExampleCrudDynamoStack/PutTransaction/Code",
+                "path": "Balance/PutTransaction/Code",
                 "children": {
                   "Stage": {
                     "id": "Stage",
-                    "path": "ExampleCrudDynamoStack/PutTransaction/Code/Stage",
+                    "path": "Balance/PutTransaction/Code/Stage",
                     "constructInfo": {
                       "fqn": "aws-cdk-lib.AssetStaging",
                       "version": "2.70.0"
@@ -193,7 +517,7 @@
                   },
                   "AssetBucket": {
                     "id": "AssetBucket",
-                    "path": "ExampleCrudDynamoStack/PutTransaction/Code/AssetBucket",
+                    "path": "Balance/PutTransaction/Code/AssetBucket",
                     "constructInfo": {
                       "fqn": "aws-cdk-lib.aws_s3.BucketBase",
                       "version": "2.70.0"
@@ -207,13 +531,13 @@
               },
               "Resource": {
                 "id": "Resource",
-                "path": "ExampleCrudDynamoStack/PutTransaction/Resource",
+                "path": "Balance/PutTransaction/Resource",
                 "attributes": {
                   "aws:cdk:cloudformation:type": "AWS::Lambda::Function",
                   "aws:cdk:cloudformation:props": {
                     "code": {
                       "s3Bucket": "cdk-hnb659fds-assets-725844594796-us-east-1",
-                      "s3Key": "cf7f65e8939f9331a14c597951e949a43eddd215ada332c77d62de263a01a9f2.zip"
+                      "s3Key": "a97305b22226ab7a2630a59afdbb8fff3038ba671c3edb009c262e8e6a00f068.zip"
                     },
                     "role": {
                       "Fn::GetAtt": [
@@ -225,6 +549,9 @@
                       "variables": {
                         "TABLE_NAME": {
                           "Ref": "Transactions098C5767"
+                        },
+                        "QUEUE_URL": {
+                          "Ref": "TransactionsQueue38DCEC48"
                         }
                       }
                     },
@@ -245,15 +572,15 @@
           },
           "GetBalance": {
             "id": "GetBalance",
-            "path": "ExampleCrudDynamoStack/GetBalance",
+            "path": "Balance/GetBalance",
             "children": {
               "ServiceRole": {
                 "id": "ServiceRole",
-                "path": "ExampleCrudDynamoStack/GetBalance/ServiceRole",
+                "path": "Balance/GetBalance/ServiceRole",
                 "children": {
                   "ImportServiceRole": {
                     "id": "ImportServiceRole",
-                    "path": "ExampleCrudDynamoStack/GetBalance/ServiceRole/ImportServiceRole",
+                    "path": "Balance/GetBalance/ServiceRole/ImportServiceRole",
                     "constructInfo": {
                       "fqn": "aws-cdk-lib.Resource",
                       "version": "2.70.0"
@@ -261,7 +588,7 @@
                   },
                   "Resource": {
                     "id": "Resource",
-                    "path": "ExampleCrudDynamoStack/GetBalance/ServiceRole/Resource",
+                    "path": "Balance/GetBalance/ServiceRole/Resource",
                     "attributes": {
                       "aws:cdk:cloudformation:type": "AWS::IAM::Role",
                       "aws:cdk:cloudformation:props": {
@@ -300,11 +627,11 @@
                   },
                   "DefaultPolicy": {
                     "id": "DefaultPolicy",
-                    "path": "ExampleCrudDynamoStack/GetBalance/ServiceRole/DefaultPolicy",
+                    "path": "Balance/GetBalance/ServiceRole/DefaultPolicy",
                     "children": {
                       "Resource": {
                         "id": "Resource",
-                        "path": "ExampleCrudDynamoStack/GetBalance/ServiceRole/DefaultPolicy/Resource",
+                        "path": "Balance/GetBalance/ServiceRole/DefaultPolicy/Resource",
                         "attributes": {
                           "aws:cdk:cloudformation:type": "AWS::IAM::Policy",
                           "aws:cdk:cloudformation:props": {
@@ -326,6 +653,34 @@
                                     {
                                       "Fn::GetAtt": [
                                         "Transactions098C5767",
+                                        "Arn"
+                                      ]
+                                    },
+                                    {
+                                      "Ref": "AWS::NoValue"
+                                    }
+                                  ]
+                                },
+                                {
+                                  "Action": [
+                                    "dynamodb:BatchGetItem",
+                                    "dynamodb:BatchWriteItem",
+                                    "dynamodb:ConditionCheckItem",
+                                    "dynamodb:DeleteItem",
+                                    "dynamodb:DescribeTable",
+                                    "dynamodb:GetItem",
+                                    "dynamodb:GetRecords",
+                                    "dynamodb:GetShardIterator",
+                                    "dynamodb:PutItem",
+                                    "dynamodb:Query",
+                                    "dynamodb:Scan",
+                                    "dynamodb:UpdateItem"
+                                  ],
+                                  "Effect": "Allow",
+                                  "Resource": [
+                                    {
+                                      "Fn::GetAtt": [
+                                        "BalanceBDB5ECCD",
                                         "Arn"
                                       ]
                                     },
@@ -364,11 +719,11 @@
               },
               "Code": {
                 "id": "Code",
-                "path": "ExampleCrudDynamoStack/GetBalance/Code",
+                "path": "Balance/GetBalance/Code",
                 "children": {
                   "Stage": {
                     "id": "Stage",
-                    "path": "ExampleCrudDynamoStack/GetBalance/Code/Stage",
+                    "path": "Balance/GetBalance/Code/Stage",
                     "constructInfo": {
                       "fqn": "aws-cdk-lib.AssetStaging",
                       "version": "2.70.0"
@@ -376,7 +731,7 @@
                   },
                   "AssetBucket": {
                     "id": "AssetBucket",
-                    "path": "ExampleCrudDynamoStack/GetBalance/Code/AssetBucket",
+                    "path": "Balance/GetBalance/Code/AssetBucket",
                     "constructInfo": {
                       "fqn": "aws-cdk-lib.aws_s3.BucketBase",
                       "version": "2.70.0"
@@ -390,13 +745,13 @@
               },
               "Resource": {
                 "id": "Resource",
-                "path": "ExampleCrudDynamoStack/GetBalance/Resource",
+                "path": "Balance/GetBalance/Resource",
                 "attributes": {
                   "aws:cdk:cloudformation:type": "AWS::Lambda::Function",
                   "aws:cdk:cloudformation:props": {
                     "code": {
                       "s3Bucket": "cdk-hnb659fds-assets-725844594796-us-east-1",
-                      "s3Key": "cf7f65e8939f9331a14c597951e949a43eddd215ada332c77d62de263a01a9f2.zip"
+                      "s3Key": "a97305b22226ab7a2630a59afdbb8fff3038ba671c3edb009c262e8e6a00f068.zip"
                     },
                     "role": {
                       "Fn::GetAtt": [
@@ -406,8 +761,8 @@
                     },
                     "environment": {
                       "variables": {
-                        "TABLE_NAME": {
-                          "Ref": "Transactions098C5767"
+                        "BALANCE_TABLE_NAME": {
+                          "Ref": "BalanceBDB5ECCD"
                         }
                       }
                     },
@@ -428,11 +783,11 @@
           },
           "TransactionsApi": {
             "id": "TransactionsApi",
-            "path": "ExampleCrudDynamoStack/TransactionsApi",
+            "path": "Balance/TransactionsApi",
             "children": {
               "Resource": {
                 "id": "Resource",
-                "path": "ExampleCrudDynamoStack/TransactionsApi/Resource",
+                "path": "Balance/TransactionsApi/Resource",
                 "attributes": {
                   "aws:cdk:cloudformation:type": "AWS::ApiGateway::RestApi",
                   "aws:cdk:cloudformation:props": {
@@ -446,11 +801,11 @@
               },
               "Deployment": {
                 "id": "Deployment",
-                "path": "ExampleCrudDynamoStack/TransactionsApi/Deployment",
+                "path": "Balance/TransactionsApi/Deployment",
                 "children": {
                   "Resource": {
                     "id": "Resource",
-                    "path": "ExampleCrudDynamoStack/TransactionsApi/Deployment/Resource",
+                    "path": "Balance/TransactionsApi/Deployment/Resource",
                     "attributes": {
                       "aws:cdk:cloudformation:type": "AWS::ApiGateway::Deployment",
                       "aws:cdk:cloudformation:props": {
@@ -473,11 +828,11 @@
               },
               "DeploymentStage.prod": {
                 "id": "DeploymentStage.prod",
-                "path": "ExampleCrudDynamoStack/TransactionsApi/DeploymentStage.prod",
+                "path": "Balance/TransactionsApi/DeploymentStage.prod",
                 "children": {
                   "Resource": {
                     "id": "Resource",
-                    "path": "ExampleCrudDynamoStack/TransactionsApi/DeploymentStage.prod/Resource",
+                    "path": "Balance/TransactionsApi/DeploymentStage.prod/Resource",
                     "attributes": {
                       "aws:cdk:cloudformation:type": "AWS::ApiGateway::Stage",
                       "aws:cdk:cloudformation:props": {
@@ -485,7 +840,7 @@
                           "Ref": "TransactionsApi503DE4B5"
                         },
                         "deploymentId": {
-                          "Ref": "TransactionsApiDeployment07ECDF19cba0f11f9fdb47d312825680fd87dbf8"
+                          "Ref": "TransactionsApiDeployment07ECDF19728998bc25c5eb2b8798fcc88a0409e6"
                         },
                         "stageName": "prod"
                       }
@@ -503,7 +858,7 @@
               },
               "Endpoint": {
                 "id": "Endpoint",
-                "path": "ExampleCrudDynamoStack/TransactionsApi/Endpoint",
+                "path": "Balance/TransactionsApi/Endpoint",
                 "constructInfo": {
                   "fqn": "aws-cdk-lib.CfnOutput",
                   "version": "2.70.0"
@@ -511,15 +866,15 @@
               },
               "Default": {
                 "id": "Default",
-                "path": "ExampleCrudDynamoStack/TransactionsApi/Default",
+                "path": "Balance/TransactionsApi/Default",
                 "children": {
                   "transactions": {
                     "id": "transactions",
-                    "path": "ExampleCrudDynamoStack/TransactionsApi/Default/transactions",
+                    "path": "Balance/TransactionsApi/Default/transactions",
                     "children": {
                       "Resource": {
                         "id": "Resource",
-                        "path": "ExampleCrudDynamoStack/TransactionsApi/Default/transactions/Resource",
+                        "path": "Balance/TransactionsApi/Default/transactions/Resource",
                         "attributes": {
                           "aws:cdk:cloudformation:type": "AWS::ApiGateway::Resource",
                           "aws:cdk:cloudformation:props": {
@@ -542,11 +897,11 @@
                       },
                       "POST": {
                         "id": "POST",
-                        "path": "ExampleCrudDynamoStack/TransactionsApi/Default/transactions/POST",
+                        "path": "Balance/TransactionsApi/Default/transactions/POST",
                         "children": {
-                          "ApiPermission.ExampleCrudDynamoStackTransactionsApi2C545868.POST..transactions": {
-                            "id": "ApiPermission.ExampleCrudDynamoStackTransactionsApi2C545868.POST..transactions",
-                            "path": "ExampleCrudDynamoStack/TransactionsApi/Default/transactions/POST/ApiPermission.ExampleCrudDynamoStackTransactionsApi2C545868.POST..transactions",
+                          "ApiPermission.BalanceTransactionsApi11E8BB89.POST..transactions": {
+                            "id": "ApiPermission.BalanceTransactionsApi11E8BB89.POST..transactions",
+                            "path": "Balance/TransactionsApi/Default/transactions/POST/ApiPermission.BalanceTransactionsApi11E8BB89.POST..transactions",
                             "attributes": {
                               "aws:cdk:cloudformation:type": "AWS::Lambda::Permission",
                               "aws:cdk:cloudformation:props": {
@@ -581,9 +936,9 @@
                               "version": "2.70.0"
                             }
                           },
-                          "ApiPermission.Test.ExampleCrudDynamoStackTransactionsApi2C545868.POST..transactions": {
-                            "id": "ApiPermission.Test.ExampleCrudDynamoStackTransactionsApi2C545868.POST..transactions",
-                            "path": "ExampleCrudDynamoStack/TransactionsApi/Default/transactions/POST/ApiPermission.Test.ExampleCrudDynamoStackTransactionsApi2C545868.POST..transactions",
+                          "ApiPermission.Test.BalanceTransactionsApi11E8BB89.POST..transactions": {
+                            "id": "ApiPermission.Test.BalanceTransactionsApi11E8BB89.POST..transactions",
+                            "path": "Balance/TransactionsApi/Default/transactions/POST/ApiPermission.Test.BalanceTransactionsApi11E8BB89.POST..transactions",
                             "attributes": {
                               "aws:cdk:cloudformation:type": "AWS::Lambda::Permission",
                               "aws:cdk:cloudformation:props": {
@@ -616,7 +971,7 @@
                           },
                           "Resource": {
                             "id": "Resource",
-                            "path": "ExampleCrudDynamoStack/TransactionsApi/Default/transactions/POST/Resource",
+                            "path": "Balance/TransactionsApi/Default/transactions/POST/Resource",
                             "attributes": {
                               "aws:cdk:cloudformation:type": "AWS::ApiGateway::Method",
                               "aws:cdk:cloudformation:props": {
@@ -668,11 +1023,11 @@
                   },
                   "balance": {
                     "id": "balance",
-                    "path": "ExampleCrudDynamoStack/TransactionsApi/Default/balance",
+                    "path": "Balance/TransactionsApi/Default/balance",
                     "children": {
                       "Resource": {
                         "id": "Resource",
-                        "path": "ExampleCrudDynamoStack/TransactionsApi/Default/balance/Resource",
+                        "path": "Balance/TransactionsApi/Default/balance/Resource",
                         "attributes": {
                           "aws:cdk:cloudformation:type": "AWS::ApiGateway::Resource",
                           "aws:cdk:cloudformation:props": {
@@ -695,11 +1050,11 @@
                       },
                       "GET": {
                         "id": "GET",
-                        "path": "ExampleCrudDynamoStack/TransactionsApi/Default/balance/GET",
+                        "path": "Balance/TransactionsApi/Default/balance/GET",
                         "children": {
-                          "ApiPermission.ExampleCrudDynamoStackTransactionsApi2C545868.GET..balance": {
-                            "id": "ApiPermission.ExampleCrudDynamoStackTransactionsApi2C545868.GET..balance",
-                            "path": "ExampleCrudDynamoStack/TransactionsApi/Default/balance/GET/ApiPermission.ExampleCrudDynamoStackTransactionsApi2C545868.GET..balance",
+                          "ApiPermission.BalanceTransactionsApi11E8BB89.GET..balance": {
+                            "id": "ApiPermission.BalanceTransactionsApi11E8BB89.GET..balance",
+                            "path": "Balance/TransactionsApi/Default/balance/GET/ApiPermission.BalanceTransactionsApi11E8BB89.GET..balance",
                             "attributes": {
                               "aws:cdk:cloudformation:type": "AWS::Lambda::Permission",
                               "aws:cdk:cloudformation:props": {
@@ -734,9 +1089,9 @@
                               "version": "2.70.0"
                             }
                           },
-                          "ApiPermission.Test.ExampleCrudDynamoStackTransactionsApi2C545868.GET..balance": {
-                            "id": "ApiPermission.Test.ExampleCrudDynamoStackTransactionsApi2C545868.GET..balance",
-                            "path": "ExampleCrudDynamoStack/TransactionsApi/Default/balance/GET/ApiPermission.Test.ExampleCrudDynamoStackTransactionsApi2C545868.GET..balance",
+                          "ApiPermission.Test.BalanceTransactionsApi11E8BB89.GET..balance": {
+                            "id": "ApiPermission.Test.BalanceTransactionsApi11E8BB89.GET..balance",
+                            "path": "Balance/TransactionsApi/Default/balance/GET/ApiPermission.Test.BalanceTransactionsApi11E8BB89.GET..balance",
                             "attributes": {
                               "aws:cdk:cloudformation:type": "AWS::Lambda::Permission",
                               "aws:cdk:cloudformation:props": {
@@ -769,7 +1124,7 @@
                           },
                           "Resource": {
                             "id": "Resource",
-                            "path": "ExampleCrudDynamoStack/TransactionsApi/Default/balance/GET/Resource",
+                            "path": "Balance/TransactionsApi/Default/balance/GET/Resource",
                             "attributes": {
                               "aws:cdk:cloudformation:type": "AWS::ApiGateway::Method",
                               "aws:cdk:cloudformation:props": {
@@ -833,11 +1188,11 @@
           },
           "CDKMetadata": {
             "id": "CDKMetadata",
-            "path": "ExampleCrudDynamoStack/CDKMetadata",
+            "path": "Balance/CDKMetadata",
             "children": {
               "Default": {
                 "id": "Default",
-                "path": "ExampleCrudDynamoStack/CDKMetadata/Default",
+                "path": "Balance/CDKMetadata/Default",
                 "constructInfo": {
                   "fqn": "aws-cdk-lib.CfnResource",
                   "version": "2.70.0"
@@ -851,7 +1206,7 @@
           },
           "BootstrapVersion": {
             "id": "BootstrapVersion",
-            "path": "ExampleCrudDynamoStack/BootstrapVersion",
+            "path": "Balance/BootstrapVersion",
             "constructInfo": {
               "fqn": "aws-cdk-lib.CfnParameter",
               "version": "2.70.0"
@@ -859,7 +1214,7 @@
           },
           "CheckBootstrapVersion": {
             "id": "CheckBootstrapVersion",
-            "path": "ExampleCrudDynamoStack/CheckBootstrapVersion",
+            "path": "Balance/CheckBootstrapVersion",
             "constructInfo": {
               "fqn": "aws-cdk-lib.CfnRule",
               "version": "2.70.0"

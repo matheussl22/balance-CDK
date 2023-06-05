@@ -1,5 +1,5 @@
 {
-  "app": "node bin/example-crud-dynamo.js",
+  "app": "node bin/balance.js",
   "watch": {
     "include": [
       "**"

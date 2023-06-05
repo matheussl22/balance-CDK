@@ -8,7 +8,7 @@
    "UpdateReplacePolicy": "Delete",
    "DeletionPolicy": "Delete",
    "Metadata": {
-    "aws:cdk:path": "ExampleCrudDynamoStack/TransactionsQueue/Resource"
+    "aws:cdk:path": "Balance/TransactionsQueue/Resource"
    }
   },
   "BalanceBDB5ECCD": {
@@ -35,7 +35,7 @@
    "UpdateReplacePolicy": "Delete",
    "DeletionPolicy": "Delete",
    "Metadata": {
-    "aws:cdk:path": "ExampleCrudDynamoStack/Balance/Resource"
+    "aws:cdk:path": "Balance/Balance/Resource"
    }
   },
   "UpdateBalanceServiceRole1961A66C": {
@@ -69,7 +69,7 @@
     ]
    },
    "Metadata": {
-    "aws:cdk:path": "ExampleCrudDynamoStack/UpdateBalance/ServiceRole/Resource"
+    "aws:cdk:path": "Balance/UpdateBalance/ServiceRole/Resource"
    }
   },
   "UpdateBalanceServiceRoleDefaultPolicyB78A8440": {
@@ -132,7 +132,7 @@
     ]
    },
    "Metadata": {
-    "aws:cdk:path": "ExampleCrudDynamoStack/UpdateBalance/ServiceRole/DefaultPolicy/Resource"
+    "aws:cdk:path": "Balance/UpdateBalance/ServiceRole/DefaultPolicy/Resource"
    }
   },
   "UpdateBalance2EC97B09": {
@@ -166,13 +166,13 @@
     "UpdateBalanceServiceRole1961A66C"
    ],
    "Metadata": {
-    "aws:cdk:path": "ExampleCrudDynamoStack/UpdateBalance/Resource",
+    "aws:cdk:path": "Balance/UpdateBalance/Resource",
     "aws:asset:path": "asset.a97305b22226ab7a2630a59afdbb8fff3038ba671c3edb009c262e8e6a00f068",
     "aws:asset:is-bundled": false,
     "aws:asset:property": "Code"
    }
   },
-  "UpdateBalanceSqsEventSourceExampleCrudDynamoStackTransactionsQueue87D204C35429AECD": {
+  "UpdateBalanceSqsEventSourceBalanceTransactionsQueue055C606EC80EE9A2": {
    "Type": "AWS::Lambda::EventSourceMapping",
    "Properties": {
     "FunctionName": {
@@ -186,7 +186,7 @@
     }
    },
    "Metadata": {
-    "aws:cdk:path": "ExampleCrudDynamoStack/UpdateBalance/SqsEventSource:ExampleCrudDynamoStackTransactionsQueue87D204C3/Resource"
+    "aws:cdk:path": "Balance/UpdateBalance/SqsEventSource:BalanceTransactionsQueue055C606E/Resource"
    }
   },
   "Transactions098C5767": {
@@ -213,7 +213,7 @@
    "UpdateReplacePolicy": "Delete",
    "DeletionPolicy": "Delete",
    "Metadata": {
-    "aws:cdk:path": "ExampleCrudDynamoStack/Transactions/Resource"
+    "aws:cdk:path": "Balance/Transactions/Resource"
    }
   },
   "PutTransactionServiceRole2C601E5F": {
@@ -247,7 +247,7 @@
     ]
    },
    "Metadata": {
-    "aws:cdk:path": "ExampleCrudDynamoStack/PutTransaction/ServiceRole/Resource"
+    "aws:cdk:path": "Balance/PutTransaction/ServiceRole/Resource"
    }
   },
   "PutTransactionServiceRoleDefaultPolicyD4DB74D0": {
@@ -308,7 +308,7 @@
     ]
    },
    "Metadata": {
-    "aws:cdk:path": "ExampleCrudDynamoStack/PutTransaction/ServiceRole/DefaultPolicy/Resource"
+    "aws:cdk:path": "Balance/PutTransaction/ServiceRole/DefaultPolicy/Resource"
    }
   },
   "PutTransaction57ED1133": {
@@ -342,7 +342,7 @@
     "PutTransactionServiceRole2C601E5F"
    ],
    "Metadata": {
-    "aws:cdk:path": "ExampleCrudDynamoStack/PutTransaction/Resource",
+    "aws:cdk:path": "Balance/PutTransaction/Resource",
     "aws:asset:path": "asset.a97305b22226ab7a2630a59afdbb8fff3038ba671c3edb009c262e8e6a00f068",
     "aws:asset:is-bundled": false,
     "aws:asset:property": "Code"
@@ -379,7 +379,7 @@
     ]
    },
    "Metadata": {
-    "aws:cdk:path": "ExampleCrudDynamoStack/GetBalance/ServiceRole/Resource"
+    "aws:cdk:path": "Balance/GetBalance/ServiceRole/Resource"
    }
   },
   "GetBalanceServiceRoleDefaultPolicy15FADC5A": {
@@ -450,7 +450,7 @@
     ]
    },
    "Metadata": {
-    "aws:cdk:path": "ExampleCrudDynamoStack/GetBalance/ServiceRole/DefaultPolicy/Resource"
+    "aws:cdk:path": "Balance/GetBalance/ServiceRole/DefaultPolicy/Resource"
    }
   },
   "GetBalanceF3D06A93": {
@@ -481,7 +481,7 @@
     "GetBalanceServiceRole462471AB"
    ],
    "Metadata": {
-    "aws:cdk:path": "ExampleCrudDynamoStack/GetBalance/Resource",
+    "aws:cdk:path": "Balance/GetBalance/Resource",
     "aws:asset:path": "asset.a97305b22226ab7a2630a59afdbb8fff3038ba671c3edb009c262e8e6a00f068",
     "aws:asset:is-bundled": false,
     "aws:asset:property": "Code"
@@ -493,10 +493,10 @@
     "Name": "TransactionServiceApi"
    },
    "Metadata": {
-    "aws:cdk:path": "ExampleCrudDynamoStack/TransactionsApi/Resource"
+    "aws:cdk:path": "Balance/TransactionsApi/Resource"
    }
   },
-  "TransactionsApiDeployment07ECDF19cba0f11f9fdb47d312825680fd87dbf8": {
+  "TransactionsApiDeployment07ECDF19728998bc25c5eb2b8798fcc88a0409e6": {
    "Type": "AWS::ApiGateway::Deployment",
    "Properties": {
     "RestApiId": {
@@ -511,7 +511,7 @@
     "TransactionsApitransactions96D82EFF"
    ],
    "Metadata": {
-    "aws:cdk:path": "ExampleCrudDynamoStack/TransactionsApi/Deployment/Resource"
+    "aws:cdk:path": "Balance/TransactionsApi/Deployment/Resource"
    }
   },
   "TransactionsApiDeploymentStageprod8F65B9E8": {
@@ -521,12 +521,12 @@
      "Ref": "TransactionsApi503DE4B5"
     },
     "DeploymentId": {
-     "Ref": "TransactionsApiDeployment07ECDF19cba0f11f9fdb47d312825680fd87dbf8"
+     "Ref": "TransactionsApiDeployment07ECDF19728998bc25c5eb2b8798fcc88a0409e6"
     },
     "StageName": "prod"
    },
    "Metadata": {
-    "aws:cdk:path": "ExampleCrudDynamoStack/TransactionsApi/DeploymentStage.prod/Resource"
+    "aws:cdk:path": "Balance/TransactionsApi/DeploymentStage.prod/Resource"
    }
   },
   "TransactionsApitransactions96D82EFF": {
@@ -544,10 +544,10 @@
     }
    },
    "Metadata": {
-    "aws:cdk:path": "ExampleCrudDynamoStack/TransactionsApi/Default/transactions/Resource"
+    "aws:cdk:path": "Balance/TransactionsApi/Default/transactions/Resource"
    }
   },
-  "TransactionsApitransactionsPOSTApiPermissionExampleCrudDynamoStackTransactionsApi2C545868POSTtransactionsE7DF100C": {
+  "TransactionsApitransactionsPOSTApiPermissionBalanceTransactionsApi11E8BB89POSTtransactions40FF5B17": {
    "Type": "AWS::Lambda::Permission",
    "Properties": {
     "Action": "lambda:InvokeFunction",
@@ -576,10 +576,10 @@
     }
    },
    "Metadata": {
-    "aws:cdk:path": "ExampleCrudDynamoStack/TransactionsApi/Default/transactions/POST/ApiPermission.ExampleCrudDynamoStackTransactionsApi2C545868.POST..transactions"
+    "aws:cdk:path": "Balance/TransactionsApi/Default/transactions/POST/ApiPermission.BalanceTransactionsApi11E8BB89.POST..transactions"
    }
   },
-  "TransactionsApitransactionsPOSTApiPermissionTestExampleCrudDynamoStackTransactionsApi2C545868POSTtransactionsB48F7A85": {
+  "TransactionsApitransactionsPOSTApiPermissionTestBalanceTransactionsApi11E8BB89POSTtransactions343C5538": {
    "Type": "AWS::Lambda::Permission",
    "Properties": {
     "Action": "lambda:InvokeFunction",
@@ -604,7 +604,7 @@
     }
    },
    "Metadata": {
-    "aws:cdk:path": "ExampleCrudDynamoStack/TransactionsApi/Default/transactions/POST/ApiPermission.Test.ExampleCrudDynamoStackTransactionsApi2C545868.POST..transactions"
+    "aws:cdk:path": "Balance/TransactionsApi/Default/transactions/POST/ApiPermission.Test.BalanceTransactionsApi11E8BB89.POST..transactions"
    }
   },
   "TransactionsApitransactionsPOSTF62B107C": {
@@ -639,7 +639,7 @@
     }
    },
    "Metadata": {
-    "aws:cdk:path": "ExampleCrudDynamoStack/TransactionsApi/Default/transactions/POST/Resource"
+    "aws:cdk:path": "Balance/TransactionsApi/Default/transactions/POST/Resource"
    }
   },
   "TransactionsApibalance39855897": {
@@ -657,10 +657,10 @@
     }
    },
    "Metadata": {
-    "aws:cdk:path": "ExampleCrudDynamoStack/TransactionsApi/Default/balance/Resource"
+    "aws:cdk:path": "Balance/TransactionsApi/Default/balance/Resource"
    }
   },
-  "TransactionsApibalanceGETApiPermissionExampleCrudDynamoStackTransactionsApi2C545868GETbalance58AA39FE": {
+  "TransactionsApibalanceGETApiPermissionBalanceTransactionsApi11E8BB89GETbalance9EC863BF": {
    "Type": "AWS::Lambda::Permission",
    "Properties": {
     "Action": "lambda:InvokeFunction",
@@ -689,10 +689,10 @@
     }
    },
    "Metadata": {
-    "aws:cdk:path": "ExampleCrudDynamoStack/TransactionsApi/Default/balance/GET/ApiPermission.ExampleCrudDynamoStackTransactionsApi2C545868.GET..balance"
+    "aws:cdk:path": "Balance/TransactionsApi/Default/balance/GET/ApiPermission.BalanceTransactionsApi11E8BB89.GET..balance"
    }
   },
-  "TransactionsApibalanceGETApiPermissionTestExampleCrudDynamoStackTransactionsApi2C545868GETbalanceAD399AA9": {
+  "TransactionsApibalanceGETApiPermissionTestBalanceTransactionsApi11E8BB89GETbalanceD4436F19": {
    "Type": "AWS::Lambda::Permission",
    "Properties": {
     "Action": "lambda:InvokeFunction",
@@ -717,7 +717,7 @@
     }
    },
    "Metadata": {
-    "aws:cdk:path": "ExampleCrudDynamoStack/TransactionsApi/Default/balance/GET/ApiPermission.Test.ExampleCrudDynamoStackTransactionsApi2C545868.GET..balance"
+    "aws:cdk:path": "Balance/TransactionsApi/Default/balance/GET/ApiPermission.Test.BalanceTransactionsApi11E8BB89.GET..balance"
    }
   },
   "TransactionsApibalanceGETE484EC5C": {
@@ -752,7 +752,7 @@
     }
    },
    "Metadata": {
-    "aws:cdk:path": "ExampleCrudDynamoStack/TransactionsApi/Default/balance/GET/Resource"
+    "aws:cdk:path": "Balance/TransactionsApi/Default/balance/GET/Resource"
    }
   },
   "CDKMetadata": {
@@ -761,7 +761,7 @@
     "Analytics": "v2:deflate64:H4sIAAAAAAAA/22Qy1LDMAxFv6V7xzRlAduWx65Dadl3FFukbuIHkd1OJuN/x3ECdMFKR9LVlewVf1jy5QKuVAjZFK2q+HDwIBqWSseBvogP7wEDsqdPkyEy2RvQViblB1Rt7mSIrAVdSeDDazDCK2vG1i+/XND4gw2dwC04p0w9tv+v7rDTiiiNRaZA82Fvp0U57myrRJ91mSKj+yMQoSe+HkPK+SaIBv0GCBk4VYPHK/TJCMmvncpeMz6ja22v0x1j9SZLH1HnrRMkfb4ze/4ks9HEW/QnK8fSRDH+6fJho9H8xLfgXfC345EZK5Gf6e5SPvJyxcvFmZQqumC80sj3U/wGnDOw6bMBAAA="
    },
    "Metadata": {
-    "aws:cdk:path": "ExampleCrudDynamoStack/CDKMetadata/Default"
+    "aws:cdk:path": "Balance/CDKMetadata/Default"
    }
   }
  },

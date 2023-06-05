@@ -1,8 +1,8 @@
 {
-  "name": "example-crud-dynamo",
+  "name": "balance",
   "version": "0.1.0",
   "bin": {
-    "example-crud-dynamo": "bin/example-crud-dynamo.js"
+    "balance": "bin/balance.js"
   },
   "scripts": {
     "build": "echo \"The build step is not required when using JavaScript!\" && exit 0",

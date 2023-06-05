@@ -1,27 +1,27 @@
 {
   "version": "31.0.0",
   "artifacts": {
-    "ExampleCrudDynamoStack.assets": {
+    "Balance.assets": {
       "type": "cdk:asset-manifest",
       "properties": {
-        "file": "ExampleCrudDynamoStack.assets.json",
+        "file": "Balance.assets.json",
         "requiresBootstrapStackVersion": 6,
         "bootstrapStackVersionSsmParameter": "/cdk-bootstrap/hnb659fds/version"
       }
     },
-    "ExampleCrudDynamoStack": {
+    "Balance": {
       "type": "aws:cloudformation:stack",
       "environment": "aws://725844594796/us-east-1",
       "properties": {
-        "templateFile": "ExampleCrudDynamoStack.template.json",
+        "templateFile": "Balance.template.json",
         "validateOnSynth": false,
         "assumeRoleArn": "arn:${AWS::Partition}:iam::725844594796:role/cdk-hnb659fds-deploy-role-725844594796-us-east-1",
         "cloudFormationExecutionRoleArn": "arn:${AWS::Partition}:iam::725844594796:role/cdk-hnb659fds-cfn-exec-role-725844594796-us-east-1",
-        "stackTemplateAssetObjectUrl": "s3://cdk-hnb659fds-assets-725844594796-us-east-1/b845ea393154d7ce950c09198ca1e074277bb8c8db650c8505ff4f9584e4fcdb.json",
+        "stackTemplateAssetObjectUrl": "s3://cdk-hnb659fds-assets-725844594796-us-east-1/ab0d9816f8b03e7bcdd05c50ca5e984dc56c8d2d8724ac54e6da224f342082fd.json",
         "requiresBootstrapStackVersion": 6,
         "bootstrapStackVersionSsmParameter": "/cdk-bootstrap/hnb659fds/version",
         "additionalDependencies": [
-          "ExampleCrudDynamoStack.assets"
+          "Balance.assets"
         ],
         "lookupRole": {
           "arn": "arn:${AWS::Partition}:iam::725844594796:role/cdk-hnb659fds-lookup-role-725844594796-us-east-1",
@@ -30,10 +30,54 @@
         }
       },
       "dependencies": [
-        "ExampleCrudDynamoStack.assets"
+        "Balance.assets"
       ],
       "metadata": {
-        "/ExampleCrudDynamoStack/Transactions": [
+        "/Balance/TransactionsQueue/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "TransactionsQueue38DCEC48"
+          }
+        ],
+        "/Balance/Balance": [
+          {
+            "type": "aws:cdk:hasPhysicalName",
+            "data": {
+              "Ref": "BalanceBDB5ECCD"
+            }
+          }
+        ],
+        "/Balance/Balance/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "BalanceBDB5ECCD"
+          }
+        ],
+        "/Balance/UpdateBalance/ServiceRole/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "UpdateBalanceServiceRole1961A66C"
+          }
+        ],
+        "/Balance/UpdateBalance/ServiceRole/DefaultPolicy/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "UpdateBalanceServiceRoleDefaultPolicyB78A8440"
+          }
+        ],
+        "/Balance/UpdateBalance/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "UpdateBalance2EC97B09"
+          }
+        ],
+        "/Balance/UpdateBalance/SqsEventSource:BalanceTransactionsQueue055C606E/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "UpdateBalanceSqsEventSourceBalanceTransactionsQueue055C606EC80EE9A2"
+          }
+        ],
+        "/Balance/Transactions": [
           {
             "type": "aws:cdk:hasPhysicalName",
             "data": {
@@ -41,140 +85,140 @@
             }
           }
         ],
-        "/ExampleCrudDynamoStack/Transactions/Resource": [
+        "/Balance/Transactions/Resource": [
           {
             "type": "aws:cdk:logicalId",
             "data": "Transactions098C5767"
           }
         ],
-        "/ExampleCrudDynamoStack/PutTransaction/ServiceRole/Resource": [
+        "/Balance/PutTransaction/ServiceRole/Resource": [
           {
             "type": "aws:cdk:logicalId",
             "data": "PutTransactionServiceRole2C601E5F"
           }
         ],
-        "/ExampleCrudDynamoStack/PutTransaction/ServiceRole/DefaultPolicy/Resource": [
+        "/Balance/PutTransaction/ServiceRole/DefaultPolicy/Resource": [
           {
             "type": "aws:cdk:logicalId",
             "data": "PutTransactionServiceRoleDefaultPolicyD4DB74D0"
           }
         ],
-        "/ExampleCrudDynamoStack/PutTransaction/Resource": [
+        "/Balance/PutTransaction/Resource": [
           {
             "type": "aws:cdk:logicalId",
             "data": "PutTransaction57ED1133"
           }
         ],
-        "/ExampleCrudDynamoStack/GetBalance/ServiceRole/Resource": [
+        "/Balance/GetBalance/ServiceRole/Resource": [
           {
             "type": "aws:cdk:logicalId",
             "data": "GetBalanceServiceRole462471AB"
           }
         ],
-        "/ExampleCrudDynamoStack/GetBalance/ServiceRole/DefaultPolicy/Resource": [
+        "/Balance/GetBalance/ServiceRole/DefaultPolicy/Resource": [
           {
             "type": "aws:cdk:logicalId",
             "data": "GetBalanceServiceRoleDefaultPolicy15FADC5A"
           }
         ],
-        "/ExampleCrudDynamoStack/GetBalance/Resource": [
+        "/Balance/GetBalance/Resource": [
           {
             "type": "aws:cdk:logicalId",
             "data": "GetBalanceF3D06A93"
           }
         ],
-        "/ExampleCrudDynamoStack/TransactionsApi/Resource": [
+        "/Balance/TransactionsApi/Resource": [
           {
             "type": "aws:cdk:logicalId",
             "data": "TransactionsApi503DE4B5"
           }
         ],
-        "/ExampleCrudDynamoStack/TransactionsApi/Deployment/Resource": [
+        "/Balance/TransactionsApi/Deployment/Resource": [
           {
             "type": "aws:cdk:logicalId",
-            "data": "TransactionsApiDeployment07ECDF19cba0f11f9fdb47d312825680fd87dbf8"
+            "data": "TransactionsApiDeployment07ECDF19728998bc25c5eb2b8798fcc88a0409e6"
           }
         ],
-        "/ExampleCrudDynamoStack/TransactionsApi/DeploymentStage.prod/Resource": [
+        "/Balance/TransactionsApi/DeploymentStage.prod/Resource": [
           {
             "type": "aws:cdk:logicalId",
             "data": "TransactionsApiDeploymentStageprod8F65B9E8"
           }
         ],
-        "/ExampleCrudDynamoStack/TransactionsApi/Endpoint": [
+        "/Balance/TransactionsApi/Endpoint": [
           {
             "type": "aws:cdk:logicalId",
             "data": "TransactionsApiEndpoint21DCA31F"
           }
         ],
-        "/ExampleCrudDynamoStack/TransactionsApi/Default/transactions/Resource": [
+        "/Balance/TransactionsApi/Default/transactions/Resource": [
           {
             "type": "aws:cdk:logicalId",
             "data": "TransactionsApitransactions96D82EFF"
           }
         ],
-        "/ExampleCrudDynamoStack/TransactionsApi/Default/transactions/POST/ApiPermission.ExampleCrudDynamoStackTransactionsApi2C545868.POST..transactions": [
+        "/Balance/TransactionsApi/Default/transactions/POST/ApiPermission.BalanceTransactionsApi11E8BB89.POST..transactions": [
           {
             "type": "aws:cdk:logicalId",
-            "data": "TransactionsApitransactionsPOSTApiPermissionExampleCrudDynamoStackTransactionsApi2C545868POSTtransactionsE7DF100C"
+            "data": "TransactionsApitransactionsPOSTApiPermissionBalanceTransactionsApi11E8BB89POSTtransactions40FF5B17"
           }
         ],
-        "/ExampleCrudDynamoStack/TransactionsApi/Default/transactions/POST/ApiPermission.Test.ExampleCrudDynamoStackTransactionsApi2C545868.POST..transactions": [
+        "/Balance/TransactionsApi/Default/transactions/POST/ApiPermission.Test.BalanceTransactionsApi11E8BB89.POST..transactions": [
           {
             "type": "aws:cdk:logicalId",
-            "data": "TransactionsApitransactionsPOSTApiPermissionTestExampleCrudDynamoStackTransactionsApi2C545868POSTtransactionsB48F7A85"
+            "data": "TransactionsApitransactionsPOSTApiPermissionTestBalanceTransactionsApi11E8BB89POSTtransactions343C5538"
           }
         ],
-        "/ExampleCrudDynamoStack/TransactionsApi/Default/transactions/POST/Resource": [
+        "/Balance/TransactionsApi/Default/transactions/POST/Resource": [
           {
             "type": "aws:cdk:logicalId",
             "data": "TransactionsApitransactionsPOSTF62B107C"
           }
         ],
-        "/ExampleCrudDynamoStack/TransactionsApi/Default/balance/Resource": [
+        "/Balance/TransactionsApi/Default/balance/Resource": [
           {
             "type": "aws:cdk:logicalId",
             "data": "TransactionsApibalance39855897"
           }
         ],
-        "/ExampleCrudDynamoStack/TransactionsApi/Default/balance/GET/ApiPermission.ExampleCrudDynamoStackTransactionsApi2C545868.GET..balance": [
+        "/Balance/TransactionsApi/Default/balance/GET/ApiPermission.BalanceTransactionsApi11E8BB89.GET..balance": [
           {
             "type": "aws:cdk:logicalId",
-            "data": "TransactionsApibalanceGETApiPermissionExampleCrudDynamoStackTransactionsApi2C545868GETbalance58AA39FE"
+            "data": "TransactionsApibalanceGETApiPermissionBalanceTransactionsApi11E8BB89GETbalance9EC863BF"
           }
         ],
-        "/ExampleCrudDynamoStack/TransactionsApi/Default/balance/GET/ApiPermission.Test.ExampleCrudDynamoStackTransactionsApi2C545868.GET..balance": [
+        "/Balance/TransactionsApi/Default/balance/GET/ApiPermission.Test.BalanceTransactionsApi11E8BB89.GET..balance": [
           {
             "type": "aws:cdk:logicalId",
-            "data": "TransactionsApibalanceGETApiPermissionTestExampleCrudDynamoStackTransactionsApi2C545868GETbalanceAD399AA9"
+            "data": "TransactionsApibalanceGETApiPermissionTestBalanceTransactionsApi11E8BB89GETbalanceD4436F19"
           }
         ],
-        "/ExampleCrudDynamoStack/TransactionsApi/Default/balance/GET/Resource": [
+        "/Balance/TransactionsApi/Default/balance/GET/Resource": [
           {
             "type": "aws:cdk:logicalId",
             "data": "TransactionsApibalanceGETE484EC5C"
           }
         ],
-        "/ExampleCrudDynamoStack/CDKMetadata/Default": [
+        "/Balance/CDKMetadata/Default": [
           {
             "type": "aws:cdk:logicalId",
             "data": "CDKMetadata"
           }
         ],
-        "/ExampleCrudDynamoStack/BootstrapVersion": [
+        "/Balance/BootstrapVersion": [
           {
             "type": "aws:cdk:logicalId",
             "data": "BootstrapVersion"
           }
         ],
-        "/ExampleCrudDynamoStack/CheckBootstrapVersion": [
+        "/Balance/CheckBootstrapVersion": [
           {
             "type": "aws:cdk:logicalId",
             "data": "CheckBootstrapVersion"
           }
         ]
       },
-      "displayName": "ExampleCrudDynamoStack"
+      "displayName": "Balance"
     },
     "Tree": {
       "type": "cdk:tree",
